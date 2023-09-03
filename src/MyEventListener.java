@@ -704,13 +704,13 @@ public class MyEventListener extends ListenerAdapter {
 		}
 		if(command.startsWith("restart")) {
 			String l = command.substring(7);
-			if(!(new File(System.getProperty("user.dir") + "/bot/restartaaa.sh").exists())) {
+			if(!(new File(System.getProperty("user.dir") + "/bot/restart" + l + ".sh").exists()))
 				channel.sendMessage("There is no server restart script for \"" + l + "\" which likely means it's not implemented.").queue();
-			}
-
 			ProcessBuilder pb = new ProcessBuilder("sh", "restart" + l + ".sh");
 			pb.directory(new File(System.getProperty("user.dir") + "/bot/"));
-			pb.start();
+			channel.sendMessage("violently killing (if exists) and restarting: " + l).queue();
+			pb.start().waitFor();
+			channel.sendMessage("Restarted " + l).queue();
 		}
 		if(command.startsWith("you're not real") || command.startsWith("youre not real") ||
 				command.startsWith("your not real") || command.startsWith("isnt real") || command.startsWith("isn't real") ) {
@@ -782,13 +782,13 @@ public class MyEventListener extends ListenerAdapter {
 					return;
 				}
 
-
 				if(command.startsWith("help"))
 					channel.sendMessage("Server Management Settings (GPL) 2023 \nYour guild ID is " + event.getGuild().getId()
 							+ "\n\nsetrole <@role> <tag> - adds a tag to a role that can be used with s!get/s!role\r\n"
 							+ "delrole <@role> - removes all tags from a role\r\n"
 							+ "deltag <tag> - removes tag from existence\r\n"
 							+ "printroles - originally a debug feature. may be helpful\r\n"
+							+ "setchannel <ID> - sets the private admin channel\r\n"
 							+ "ambient - toggles ambient (unprompted) messages on/off").queue();
 
 				if(command.startsWith("setrole")) {
@@ -850,6 +850,13 @@ public class MyEventListener extends ListenerAdapter {
 				}
 				if(command.startsWith("printroles")) {
 					channel.sendMessage(thisServerSettings.debugfrick()).queue();
+				}
+				if(command.startsWith("setchannel")) {
+					thisServerSettings.adminChannel = Long.parseLong(GetArgAt(command, 1));
+					String channelName = event.getGuild().getTextChannelById(thisServerSettings.adminChannel).getName();
+					channel.sendMessage("Set admin channel to:" + channelName
+							//+ "\n[!] deleted and edited messages will appear here"
+					).queue();
 				}
 				if(command.startsWith("ambient")) {
 					List<String> exclude = ReadTextFile("exclude.txt");

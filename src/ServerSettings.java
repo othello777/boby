@@ -74,7 +74,8 @@ public class ServerSettings extends Object implements Serializable {
 	public boolean ambient = true;
 	public boolean lyric = true;
 	public boolean autocrop = true;
-	public List<rolepair> rolepairs = new ArrayList<rolepair>();
+	public long adminChannel;
+	private List<rolepair> rolepairs = new ArrayList<rolepair>();
 	
 	
 	private class rolepair implements Serializable {
