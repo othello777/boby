@@ -105,7 +105,7 @@ public class MyEventListener extends ListenerAdapter {
 		    	boolean contin = true;
 		    	while(contin) {
 		    		String text = scanner.nextLine();
-		    		if(text != null && !text.equals("")) {
+		    		if(text != null && !text.isEmpty()) {
 						globalChannel.sendMessage(text).queue();
 		    			System.out.println();
 		    			if(text.equals("s!quit")) {
@@ -518,7 +518,7 @@ public class MyEventListener extends ListenerAdapter {
 				for (RichCustomEmoji emote : emotes) {
 					msg += emote.getAsMention();
 				}
-				if(emotes.size() == 0) {
+				if(emotes.isEmpty()) {
 					msg += "No Custom Emotes";
 				}
 				channel.sendMessage(msg).queue();
@@ -589,7 +589,7 @@ public class MyEventListener extends ListenerAdapter {
 				if(mentionsList.size() > 1) {
 					channel.sendMessage("crig only 1 mentn plz").queue();
 				}
-				if(mentionsList.size() < 1) {
+				if(mentionsList.isEmpty()) {
 					funguy = event.getAuthor();
 				}
 				else
@@ -628,7 +628,7 @@ public class MyEventListener extends ListenerAdapter {
 			if(mentionsList.size() > 1) {
 				channel.sendMessage("crig only 1 mentn plz").queue();
 			}
-			if(mentionsList.size() < 1) {
+			if(mentionsList.isEmpty()) {
 				funguy = event.getAuthor();
 			}
 			else
@@ -693,7 +693,7 @@ public class MyEventListener extends ListenerAdapter {
 				channel.sendMessage("I can only ratio one person at a time").queue();
 				return;
 			}
-			else if (mentionsList.size() < 1) {
+			else if (mentionsList.isEmpty()) {
 				channel.sendMessage("please tell me who to ratio").queue();
 				return;
 			}
@@ -741,7 +741,7 @@ public class MyEventListener extends ListenerAdapter {
 			Expression calc = new ExpressionBuilder(convertedString).build();
 			channel.sendMessage("The answer is " + calc.evaluate()).queue();
 		}
-		if("t".contains(command) && !command.equals("")) {
+		if("t".contains(command) && !command.isEmpty()) {
 			channel.sendMessage(
 "早上好中国 现在我有冰淇淋 我很喜欢冰淇淋 但是 速度与激情9 比冰淇淋 速度与激情 速度与激情9 我最喜欢 所以…现在是音乐时间 准备 1 "
 + "2 3 两个礼拜以后 速度与激情9 ×3 不要忘记 不要错过 记得去电影院看速度与激情9 因为非常好电影 动作非常好 差不多一样冰淇淋 再见\r\n\r\n"
@@ -797,7 +797,7 @@ public class MyEventListener extends ListenerAdapter {
 						channel.sendMessage("I can only set one role at a time").queue();
 						return;
 					}
-					else if (mentionsList.size() < 1) {
+					else if (mentionsList.isEmpty()) {
 						channel.sendMessage("please @ the role").queue();
 						return;
 					}
@@ -806,7 +806,7 @@ public class MyEventListener extends ListenerAdapter {
 						tag = GetArgAt(command, 2);
 					} catch (Exception ignored) {}
 
-					if(tag.equals("")) {
+					if(tag.isEmpty()) {
 						channel.sendMessage("what tag do I set for " + mentionsList.get(0).getAsMention() + "?"
 								+ "\nplease provide a tag (phrase used in the s!get command)").queue();
 						return;
@@ -823,7 +823,7 @@ public class MyEventListener extends ListenerAdapter {
 						channel.sendMessage("I can delete one role at a time").queue();
 						return;
 					}
-					else if (mentionsList.size() < 1) {
+					else if (mentionsList.isEmpty()) {
 						channel.sendMessage("please @ the role").queue();
 						return;
 					}
@@ -876,7 +876,7 @@ public class MyEventListener extends ListenerAdapter {
 								// trim newline when comparing with lineToRemove
 								String trimmedLine = currentLine.trim();
 								if(trimmedLine.equals(lineToRemove)) continue;
-								writer.write(currentLine + System.getProperty("line.separator"));
+								writer.write(currentLine + System.lineSeparator());
 							}
 							writer.close();
 							reader.close();
@@ -907,138 +907,6 @@ public class MyEventListener extends ListenerAdapter {
 					channel.sendMessage("WARNING: UNABLE TO SAVE SERVER SETTINGS!").queue();
 					e.printStackTrace();
 				}
-			}
-
-
-
-			//NANO inbuilt currency manager
-			if(command.startsWith("nano") || content.toLowerCase().startsWith(prefixString4)) {
-				String pre = "nano";
-				if(content.toLowerCase().startsWith(prefixString4)) {
-					command = content.substring(prefixString4.length());
-					pre = "";
-				}
-					FunProfile funfrom = GetNanoProfile(event.getAuthor(), channel);
-
-
-					//nano utility help
-					if(command.startsWith(pre + "help"))
-						channel.sendMessage("NANO MANAGEMENT UTILITY (gpl) 2022 \n"
-					+ "**type \"nano\" at the beginning of evey command** or use n! prefix \n"
-					+ "help - displays this message\n"
-					+ "pay (mention) (amount) - Pays (mention) XNO in (amount) from _your internal funds_\n"
-					+ "pr{ofile} [mention] - Displays nano profile information\n"
-					+ "notif{ications} - Turns on/off ping notifications\n"
-					/*+ "> MAX ADMIN STUFFS:\n"
-					+ "fine (mention) (amount) - sucks (amount) funbucks from (mention) into the back void \n"
-					+ "grant (mention) (amount) - grants (amount) funbucks to (mention) from the eternal stash \n"
-					+ "ban (mention) - prevents (mention) from using any fun:tm: commands \n"
-					+ "pardon (mention) - un-bans (mention)\n"
-					+ "tax (amount) - deflates the entire economy over the starting funbucks\n"
-					+ "salary (amount) - inflates the entire economy\n"*/).queue();
-
-					//pay command
-					if(command.startsWith(pre + "pay"))
-					{
-						List<Member> mentionsList = inputMessage.getMentions().getMembers();
-						FunProfile funto;
-
-						try {
-							funto = GetNanoProfile(mentionsList.get(0).getUser(), channel);
-						} catch (Exception e) {
-							channel.sendMessage("Yo, who am I payin' here?").queue();
-							return;
-						}
-
-						String arg2;
-						try {
-							arg2 = GetArgAt(command, 2);
-						} catch (Exception e) {
-							channel.sendMessage("Yo, how much am I payin' here?").queue();
-							return;
-						}
-
-						float amount;
-						try {
-							amount = Float.parseFloat(arg2);
-						} catch (Exception e) {
-							channel.sendMessage("Yo, thats crig?").queue();
-							return;
-						}
-						if(amount < 0) {
-							channel.sendMessage("oi, you are the one payin' here. value below 0 not allowed").queue();
-							return;
-						}
-						if(amount > funfrom.funbucks) {
-							channel.sendMessage("oi, you dont have enough money").queue();
-							return;
-						}
-						funfrom.funbucks -= amount;
-						funfrom.outboundt++;
-						funto.funbucks += amount;
-						funto.inboundt++;
-
-						channel.sendMessage("TRANSACTION OF **Ӿ" + amount
-								+ "** FROM " + funfrom.GetName()
-								+ " TO " + funto.GetName()).queue();
-					}
-					//nano profile information
-					if(command.startsWith(pre + "pr"))
-					{
-						List<Member> mentionsList = inputMessage.getMentions().getMembers();
-						if(mentionsList.size() > 1) {
-							channel.sendMessage("crig only 1 mentn plz").queue();
-						}
-
-						FunProfile funguy;
-						try {
-							funguy = GetNanoProfile(mentionsList.get(0).getUser(), channel);
-						} catch (Exception e) {
-							funguy = GetNanoProfile(event.getAuthor(), channel);
-						}
-
-
-						channel.sendMessage("NANO UTILITY USER " + funguy.GetName() + "\n```\n"
-								+ "User internal nano: Ӿ" + funguy.funbucks + "\n"
-								+ "Total Outbound Transactions: " + funguy.outboundt + "\n"
-								+ "Total Inbound Transactions: " + funguy.inboundt + "\n"
-								+ "External nano address: " + funguy.GetAddr() + "\n"
-								+ "Use external address: " + funguy.UseExt + "\n"
-								//+ "Administrative Edits: " + funguy.adminedit + "\n"
-								//+ "Blanket Edits: " + funguy.blanketedit + "\n"
-								//+ "User Ban Status: " + funguy.banned + "\n"
-								+ "User Notification Status: " + funguy.notif + "\n"
-								+ "User Discord ID: " + funguy.owner.getId() + "\n"
-								+ "```").queue();
-					}
-					if(command.startsWith(pre + "notif"))
-					{
-						funfrom.notif = !funfrom.notif;
-
-						if(funfrom.notif)
-							channel.sendMessage("Ping notifications are now turned **on**").queue();
-						else
-							channel.sendMessage("Ping notifications are now turned **off**").queue();
-					}
-
-					//SAVE DEM FUN(TM) DATABASE STUFFS
-					try {
-						for (FunProfile funProfile : nanolads) {
-							funProfile.SetUserID();
-						}
-					    FileOutputStream fos = new FileOutputStream(nanoName);
-					    ObjectOutputStream oos = new ObjectOutputStream(fos);
-					    oos.writeObject(nanolads);
-					    oos.flush();
-					    oos.close();
-					    System.out.println("Saved nano database state.");
-					} catch (Exception e) {
-						channel.sendMessage("WARNING: UNABLE TO SAVE TO NANO DATABASE!").queue();
-						e.printStackTrace();
-					}
-
-					UpdateEconomy();
-				//}
 			}
 
 			//FUNNY HAHA MONEY CURRENCY MAX OWNED TM (R) INC. (c) TKOD DING DING DING DINM GISNG
@@ -1347,7 +1215,7 @@ public class MyEventListener extends ListenerAdapter {
 								channel.sendMessage("USER " + funto.GetName()
 								+ " SALARYIED **$" + amount + "** FUNBUCKS:tm:").queue();
 							}
-							FunProfile.defaultvalue += amount;
+							FunProfile.defaultvalue += (int) amount;
 							channel.sendMessage("SALARY COMPLETE").queue();
 						}
 					}
@@ -1385,8 +1253,8 @@ public class MyEventListener extends ListenerAdapter {
 		}
 		if((!content.toLowerCase().startsWith(prefixString)
 				&& !content.toLowerCase().startsWith(prefixString2))
-				|| (content.toLowerCase().equals(prefixString + "sing")
-			    || content.toLowerCase().equals(prefixString2 + "sing"))){
+				|| (content.equalsIgnoreCase(prefixString + "sing")
+			    || content.equalsIgnoreCase(prefixString2 + "sing"))){
 			if(event.getAuthor().isBot())
 				return;
 
@@ -1606,7 +1474,7 @@ public class MyEventListener extends ListenerAdapter {
 					    // Access them in here
 					    // Use for example messages.get(0) to get the received message
 					    // (messages is of type List)
-						if(messages.size() == 0) {
+						if(messages.isEmpty()) {
 							System.out.println("not found message");
 							channel.sendMessage(board).queue();
 						}
