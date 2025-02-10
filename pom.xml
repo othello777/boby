@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>boby</groupId>
   <artifactId>boby</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>v16</version>
   <name>boby</name>
   <description>boby discord bot</description>
   <build>

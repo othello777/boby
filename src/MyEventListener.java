@@ -1264,6 +1264,19 @@ public class MyEventListener extends ListenerAdapter {
 					return;
 			}
 
+			//Carl's Cart Forwarder
+			//System.out.println(event.getGuildChannel().getId());
+			if(event.getGuild().getIdLong() == 410530160102866944L //TDK
+					&& event.getGuildChannel().getIdLong() == 622927404540887050L) //#sar-surviv
+			{
+				//System.out.println("channel detected! num attachments: " + inputMessage.getAttachments().size());
+				if(inputMessage.getAttachments().size() == 2) {
+					System.out.println("sender or something: " + inputMessage.getAuthor());
+					((MessageChannel) (api.getGuildById(1266807463525486594L) //othello7 house
+							.getGuildChannelById(1338601206913962027L))) //#sar
+							.sendMessage("New Carl's Cart items " + inputMessage.getAttachments().get(1).getUrl()).queue();
+				}
+			}
 
 			if(random.nextBoolean())
 				if(content.toLowerCase().contains("boby")) {
