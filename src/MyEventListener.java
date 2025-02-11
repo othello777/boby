@@ -122,11 +122,26 @@ public class MyEventListener extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		MessageChannel channel; //this gets used literally everywhere lmao
+		Message inputMessage = event.getMessage(); //save input message
+
+		//Carl's Cart Forwarder
+		if(event.getGuild().getIdLong() == 410530160102866944L //TDK
+				&& event.getGuildChannel().getIdLong() == 622927404540887050L) //#sar-surviv
+		{
+			//System.out.println("channel detected! num attachments: " + inputMessage.getAttachments().size());
+			if(inputMessage.getAttachments().size() == 2) {
+				System.out.println("sender or something: " + inputMessage.getAuthor());
+				((MessageChannel) (api.getGuildById(1266807463525486594L) //othello7 house
+						.getGuildChannelById(1338601206913962027L))) //#sar
+						.sendMessage("New Carl's Cart items " + inputMessage.getContentRaw()
+								+ " " + inputMessage.getAttachments().get(1).getUrl()).queue();
+			}
+		}
 
 		if(event.getAuthor().isBot() && !(event.getMessage().getContentRaw().toLowerCase().contains(prefixString) ||
 		   event.getMessage().getContentRaw().toLowerCase().contains(prefixString2))) return;
 
-		Message inputMessage = event.getMessage(); //save input message
+
 		channel = event.getChannel(); //respond in same channel
 		globalChannel = event.getChannel(); //global should only be used where you know threading isnt a skissue
 		String content = inputMessage.getContentRaw(); //get the raw content of the message
@@ -171,49 +186,56 @@ public class MyEventListener extends ListenerAdapter {
 						String categ = GetArgs(command).get(0);
 
 						System.out.println(categ);
-						if(categ.equals("main"))
-							channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
-									+ "help - displays help message\r\n" +
-									"ping - approx ping\r\n" +
-									"say (string) - says the message\r\n" +
-									"msg (mention or UserID) (string) - sends a DM from the bot to the user\r\n" +
-									"amsgid - (doesn't work)\r\n" +
-									"bazinga - acronym funny\r\n" +
-									"killself - kills boby\r\n" +
-									"revive - revive a dead boby\r\n" +
-									"tacoflip - heads or tails\r\n" +
-									"amongus or amogus - Are you imposter? Find out with this horrible command!\r\n" +
-									"decide (string) [string]...repeat - randomly chooses\r\n" +
-									"spamE(string) - spams contents in formatting\r\n" +
-									"spamP(string) - spams contents in plain\r\n" +
-									"spamC(string) - spams contents in plain without spaces\r\n" +
-									"clearchat - clears the current chat ;)\r\n" +
-									"listargs - debug feature to test fricktm arg parser\r\n" +
-									"face (mention) - Sends user's profile picture\r\n" +
-									"ratio (mention) - ratios them\r\n" +
-									"autocrop {video} - tries to automatically detect black bars and crop\r\n" +
-									//"ambient - toggles on or off ambient interactions from Boby\r\n" +
-									"????? - I just wanna tell you how I'm feeling").queue();
-						else if (categ.equals("image") || categ.equals("images") || categ.equals("img"))
-							channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
-									+ "motor [int] - Motor Image Repo\r\n" +
-									"jojo [int] - Jojo Image Repo\r\n" +
-									"img [int] - Public Image Repo\r\n" +
-									"E [int] - E image repo\r\n" +
-									"addimg {image} - adds the attachment to s!img\r\n" +
-									"addjojo {image} - (doesnt work) adds the attachment to s!jojo\r\n" +
-									"addE {image} - Adds to E image repo").queue();
-						else if (categ.equals("misc"))
-							channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
-									+ "die\r\n" +
-									"dead\r\n" +
-									"perished\r\n" +
-									"crash\r\n" +
-									"thewalrus72\r\n" +
-									"no - yes\r\n" +
-									"yes - no\r\n" +
-									"makebot - pings creator\r\n" +
-									"do the").queue();
+                        switch (categ) {
+                            case "main":
+                                channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
+                                        + "help - displays help message\r\n" +
+                                        "ping - approx ping\r\n" +
+                                        "say (string) - says the message\r\n" +
+                                        "msg (mention or UserID) (string) - sends a DM from the bot to the user\r\n" +
+                                        "amsgid - (doesn't work)\r\n" +
+                                        "bazinga - acronym funny\r\n" +
+                                        "killself - kills boby\r\n" +
+                                        "revive - revive a dead boby\r\n" +
+                                        "tacoflip - heads or tails\r\n" +
+                                        "amongus or amogus - Are you imposter? Find out with this horrible command!\r\n" +
+                                        "decide (string) [string]...repeat - randomly chooses\r\n" +
+                                        "spamE(string) - spams contents in formatting\r\n" +
+                                        "spamP(string) - spams contents in plain\r\n" +
+                                        "spamC(string) - spams contents in plain without spaces\r\n" +
+                                        "clearchat - clears the current chat ;)\r\n" +
+                                        "listargs - debug feature to test fricktm arg parser\r\n" +
+                                        "face (mention) - Sends user's profile picture\r\n" +
+                                        "ratio (mention) - ratios them\r\n" +
+                                        "autocrop {video} - tries to automatically detect black bars and crop\r\n" +
+                                        //"ambient - toggles on or off ambient interactions from Boby\r\n" +
+                                        "????? - I just wanna tell you how I'm feeling").queue();
+                                break;
+                            case "image":
+                            case "images":
+                            case "img":
+                                channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
+                                        + "motor [int] - Motor Image Repo\r\n" +
+                                        "jojo [int] - Jojo Image Repo\r\n" +
+                                        "img [int] - Public Image Repo\r\n" +
+                                        "E [int] - E image repo\r\n" +
+                                        "addimg {image} - adds the attachment to s!img\r\n" +
+                                        "addjojo {image} - (doesnt work) adds the attachment to s!jojo\r\n" +
+                                        "addE {image} - Adds to E image repo").queue();
+                                break;
+                            case "misc":
+                                channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
+                                        + "die\r\n" +
+                                        "dead\r\n" +
+                                        "perished\r\n" +
+                                        "crash\r\n" +
+                                        "thewalrus72\r\n" +
+                                        "no - yes\r\n" +
+                                        "yes - no\r\n" +
+                                        "makebot - pings creator\r\n" +
+                                        "do the").queue();
+                                break;
+                        }
 
 					}
 
@@ -1264,20 +1286,6 @@ public class MyEventListener extends ListenerAdapter {
 					return;
 			}
 
-			//Carl's Cart Forwarder
-			//System.out.println(event.getGuildChannel().getId());
-			if(event.getGuild().getIdLong() == 410530160102866944L //TDK
-					&& event.getGuildChannel().getIdLong() == 622927404540887050L) //#sar-surviv
-			{
-				//System.out.println("channel detected! num attachments: " + inputMessage.getAttachments().size());
-				if(inputMessage.getAttachments().size() == 2) {
-					System.out.println("sender or something: " + inputMessage.getAuthor());
-					((MessageChannel) (api.getGuildById(1266807463525486594L) //othello7 house
-							.getGuildChannelById(1338601206913962027L))) //#sar
-							.sendMessage("New Carl's Cart items " + inputMessage.getAttachments().get(1).getUrl()).queue();
-				}
-			}
-
 			if(random.nextBoolean())
 				if(content.toLowerCase().contains("boby")) {
 					switch (random.nextInt(5)) {
@@ -1420,14 +1428,14 @@ public class MyEventListener extends ListenerAdapter {
 
 					// Check if link leads to a video
 					//Connection.Response response = Jsoup.connect(link).execute();
-					String contentType = "video";//response.contentType();
+					//String contentType = "video";//response.contentType();
 
-					if (contentType.startsWith("video")) {
+					//if (contentType.startsWith("video")) {
 						filename = DownloadFile(link, "autocrop");
-					} else {
+					/*} else {
 						channel.sendMessage("Link doesn't lead to a video!").queue();
 						return;
-					}
+					}*/
 				}
 				else{
 					channel.sendMessage("No attachment or link").queue();
@@ -1511,19 +1519,6 @@ public class MyEventListener extends ListenerAdapter {
 		newprofile.owner = user;//.getIdLong();
 		newprofile.funbucks = 25;
 		lads.add(newprofile);
-		return newprofile;
-	}
-
-	private FunProfile GetNanoProfile(User user, MessageChannel channel) {
-		for (FunProfile funProfile : nanolads) {//e
-			if(funProfile.owner.getIdLong() == user.getIdLong())
-				return funProfile;
-		}
-		channel.sendMessage("Adding new user " + user.getAsMention()).queue();
-		FunProfile newprofile = new FunProfile();
-		newprofile.owner = user;//.getIdLong();
-		newprofile.funbucks = 0;
-		nanolads.add(newprofile);//e
 		return newprofile;
 	}
 
