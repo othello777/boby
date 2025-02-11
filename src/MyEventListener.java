@@ -1538,7 +1538,6 @@ public class MyEventListener extends ListenerAdapter {
 				.replace("?", "").replace(",", "").replace("\"", "");
 	}
 
-	@SuppressWarnings("deprecation")
 	private String DownloadFile(Attachment attachment, String dir) {
 		String dirString = (System.getProperty("user.dir") + "/bot/" + dir + "/");
 		File toDownload = new File(dirString + attachment.getFileName());
@@ -1549,11 +1548,11 @@ public class MyEventListener extends ListenerAdapter {
 							+ "0." + attachment.getFileExtension());
 		}
 		System.out.println(dirString + toDownload.getName());
-		attachment.downloadToFile(toDownload).join();
+		attachment.getProxy().downloadToFile(toDownload).join();
 		return toDownload.getName();
 	}
 
-	@SuppressWarnings("all")
+	@SuppressWarnings("SameParameterValue")
 	private String DownloadFile(String link, String dir) {
 		String dirString = (System.getProperty("user.dir") + "/bot/" + dir + "/");
 		HttpClient httpClient = HttpClient.newHttpClient();

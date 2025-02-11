@@ -1,4 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <modelVersion>4.0.0</modelVersion>
   <groupId>boby</groupId>
   <artifactId>boby</artifactId>
@@ -10,15 +13,15 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.13.0</version>
         <configuration>
-          <release>11</release>
+          <release>21</release>
         </configuration>
       </plugin>
       <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-jar-plugin</artifactId>
-      <version>3.3.0</version>
+      <version>3.4.2</version>
       <configuration>
         <archive>
           <manifest>
@@ -30,7 +33,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.4.1</version>
+        <version>3.6.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -44,6 +47,23 @@
                   <mainClass>Main</mainClass>
                 </transformer>
               </transformers>
+                <filters>
+                    <filter>
+                        <artifact>*:*</artifact>
+                        <excludes>
+                            <exclude>module-info.class</exclude>
+                            <exclude>META-INF/*.MF</exclude>
+                            <exclude>META-INF/*.SF</exclude>
+                            <exclude>META-INF/*.DSA</exclude>
+                            <exclude>META-INF/*.RSA</exclude>
+                            <exclude>META-INF/LICENSE.txt</exclude>
+                            <exclude>META-INF/NOTICE</exclude>
+                            <exclude>META-INF/LICENSE</exclude>
+                            <exclude>META-INF/versions/9/module-info.class</exclude>
+                            <exclude>META-INF/okio.kotlin_module</exclude>
+                        </excludes>
+                    </filter>
+                </filters>
             </configuration>
           </execution>
         </executions>
@@ -54,7 +74,7 @@
       <dependency>
           <groupId>net.dv8tion</groupId>
           <artifactId>JDA</artifactId>
-          <version>5.0.0-beta.8</version>
+          <version>5.3.0</version>
       </dependency>
       <!-- https://mvnrepository.com/artifact/net.objecthunter/exp4j -->
 	<dependency>
@@ -66,7 +86,7 @@
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.16.1</version>
+      <version>1.18.3</version>
     </dependency>
 
 
