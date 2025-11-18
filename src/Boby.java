@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 //import uk.oczadly.karl.jnano.util.workgen.*;
 import net.objecthunter.exp4j.*;
 
-public class MyEventListener extends ListenerAdapter {
+public class Boby extends ListenerAdapter {
 	public MessageChannel globalChannel;
 	public final String prefixString  = "s!";
 	public final String prefixString2 = "boby ";
@@ -57,7 +57,7 @@ public class MyEventListener extends ListenerAdapter {
 	//RpcQueryNode rpc = RpcServiceProviders.nanex();
 
 	@SuppressWarnings("unchecked")
-	MyEventListener(JDA jda){
+    Boby(JDA jda){
 		api = jda;
 		/*System.out.println("List of attached Servers:");
         for (Guild guild : api.getGuilds()) {
@@ -171,19 +171,20 @@ public class MyEventListener extends ListenerAdapter {
 				if(!command.startsWith("helpme")) {
 					if(command.length() < 6)
 					{
-						channel.sendMessage("**help (category)** for additional help info\r\n" +
-								"\r\n" +
-								"`help main` - main bulk of random commands\r\n" +
-								"`help images` - image repository commands\r\n" +
-								"`help misc` - small/miscellaneous commands\r\n" +
-								"\r\n" +
-								"`boby help-music` or `m!help-music` - music playback via JMusicBot\r\n" +
-								"`s!/boby funhelp` or `f!help`- Fun:tm: command information\r\n" +
-								"`a!help` - server admin command information").queue();
+						channel.sendMessage("""
+                                **help (category)** for additional help info\r
+                                \r
+                                `help main` - main bulk of random commands\r
+                                `help images` - image repository commands\r
+                                `help misc` - small/miscellaneous commands\r
+                                \r
+                                `boby help-music` or `m!help-music` - music playback via JMusicBot\r
+                                `s!/boby funhelp` or `f!help`- Fun:tm: command information\r
+                                `a!help` - server admin command information""").queue();
 					}
 					else
 					{
-						String categ = GetArgs(command).get(0);
+						String categ = GetArgs(command).getFirst();
 
 						System.out.println(categ);
                         switch (categ) {
@@ -214,26 +215,28 @@ public class MyEventListener extends ListenerAdapter {
                             case "image":
                             case "images":
                             case "img":
-                                channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
-                                        + "motor [int] - Motor Image Repo\r\n" +
-                                        "jojo [int] - Jojo Image Repo\r\n" +
-                                        "img [int] - Public Image Repo\r\n" +
-                                        "E [int] - E image repo\r\n" +
-                                        "addimg {image} - adds the attachment to s!img\r\n" +
-                                        "addjojo {image} - (doesnt work) adds the attachment to s!jojo\r\n" +
-                                        "addE {image} - Adds to E image repo").queue();
+                                channel.sendMessage("""
+                                        **Key: Command (required field) [optional field] {attachment} - what it does**
+                                        motor [int] - Motor Image Repo\r
+                                        jojo [int] - Jojo Image Repo\r
+                                        img [int] - Public Image Repo\r
+                                        E [int] - E image repo\r
+                                        addimg {image} - adds the attachment to s!img\r
+                                        addjojo {image} - (doesnt work) adds the attachment to s!jojo\r
+                                        addE {image} - Adds to E image repo""").queue();
                                 break;
                             case "misc":
-                                channel.sendMessage("**Key: Command (required field) [optional field] {attachment} - what it does**\n"
-                                        + "die\r\n" +
-                                        "dead\r\n" +
-                                        "perished\r\n" +
-                                        "crash\r\n" +
-                                        "thewalrus72\r\n" +
-                                        "no - yes\r\n" +
-                                        "yes - no\r\n" +
-                                        "makebot - pings creator\r\n" +
-                                        "do the").queue();
+                                channel.sendMessage("""
+                                        **Key: Command (required field) [optional field] {attachment} - what it does**
+                                        die\r
+                                        dead\r
+                                        perished\r
+                                        crash\r
+                                        thewalrus72\r
+                                        no - yes\r
+                                        yes - no\r
+                                        makebot - pings creator\r
+                                        do the""").queue();
                                 break;
                         }
 
@@ -349,7 +352,7 @@ public class MyEventListener extends ListenerAdapter {
 			}
 			if(command.startsWith("addimg")) {
 				try {
-					Attachment attachment = inputMessage.getAttachments().get(0);
+					Attachment attachment = inputMessage.getAttachments().getFirst();
 					if(attachment.isImage()) {
 						channel.sendMessage("Added **" + DownloadFile(attachment, "img") + "** to s!img").queue();
 					} else {
@@ -361,7 +364,7 @@ public class MyEventListener extends ListenerAdapter {
 			}
 			if(command.startsWith("addE")) {
 				try {
-					Attachment attachment = inputMessage.getAttachments().get(0);
+					Attachment attachment = inputMessage.getAttachments().getFirst();
 					if(attachment.isImage()) {
 						channel.sendMessage("Added **" + DownloadFile(attachment, "E") + "** to s!E").queue();
 					} else {
@@ -616,7 +619,7 @@ public class MyEventListener extends ListenerAdapter {
 				}
 				else
 					try {
-						funguy = mentionsList.get(0).getUser();
+						funguy = mentionsList.getFirst().getUser();
 					} catch (Exception e) {
 						channel.sendMessage("Error in getting mention").queue();
 						return;
@@ -624,18 +627,19 @@ public class MyEventListener extends ListenerAdapter {
 				channel.sendMessage(funguy.getAvatarUrl()).queue();
 			}
 			if(command.startsWith("shrine")) {
-				channel.sendMessage("```" +
-						"       .\r\n" +
-						"       |\r\n" +
-						"  .   ]#[   .\r\n" +
-						"   \\_______/\r\n" +
-						".    ]###[    .\r\n" +
-						" \\__]#.-.#[__/\r\n" +
-						"  |___| |___|\r\n" +
-						"  |___|_|___|\r\n" +
-						"  ####/_\\####\r\n" +
-						"     |___|\r\n" +
-						"    /_____\\```").queue();
+				channel.sendMessage("""
+                        ```\
+                               .\r
+                               |\r
+                          .   ]#[   .\r
+                           \\_______/\r
+                        .    ]###[    .\r
+                         \\__]#.-.#[__/\r
+                          |___| |___|\r
+                          |___|_|___|\r
+                          ####/_\\####\r
+                             |___|\r
+                            /_____\\```""").queue();
 			}//The best command�.
 			if(command.toLowerCase().startsWith("thewalrus72")) {
 				channel.sendMessage("that guy is pretty cool, I think").queue();
@@ -656,7 +660,7 @@ public class MyEventListener extends ListenerAdapter {
 			else
 			{
 				try {
-					funguy = mentionsList.get(0).getUser();
+					funguy = mentionsList.getFirst().getUser();
 				} catch (Exception e) {
 					channel.sendMessage("Error in getting mention").queue();
 					return;
@@ -722,7 +726,7 @@ public class MyEventListener extends ListenerAdapter {
 			inputMessage.addReaction(Emoji.fromUnicode("U+267B")).queue();
 			inputMessage.addReaction(Emoji.fromUnicode("U+2764")).queue();
 			inputMessage.addReaction(Emoji.fromUnicode("U+1F4AC")).queue();
-			channel.sendMessage(mentionsList.get(0).getAsMention() + " has been ratio’d!").queue();
+			channel.sendMessage(mentionsList.getFirst().getAsMention() + " has been ratio’d!").queue();
 		}
 		if(command.startsWith("restart")) {
 			String l = command.substring(7);
@@ -765,9 +769,11 @@ public class MyEventListener extends ListenerAdapter {
 		}
 		if("t".contains(command) && !command.isEmpty()) {
 			channel.sendMessage(
-"早上好中国 现在我有冰淇淋 我很喜欢冰淇淋 但是 速度与激情9 比冰淇淋 速度与激情 速度与激情9 我最喜欢 所以…现在是音乐时间 准备 1 "
-+ "2 3 两个礼拜以后 速度与激情9 ×3 不要忘记 不要错过 记得去电影院看速度与激情9 因为非常好电影 动作非常好 差不多一样冰淇淋 再见\r\n\r\n"
-					+ "中共万岁").queue();
+                    """
+                            早上好中国 现在我有冰淇淋 我很喜欢冰淇淋 但是 速度与激情9 比冰淇淋 速度与激情 速度与激情9 我最喜欢 所以…现在是音乐时间 准备 1 \
+                            2 3 两个礼拜以后 速度与激情9 ×3 不要忘记 不要错过 记得去电影院看速度与激情9 因为非常好电影 动作非常好 差不多一样冰淇淋 再见\r
+                            \r
+                            中共万岁""").queue();
 		}
 		if(command.startsWith("get") || command.startsWith("role")) {
 			String tag = GetArgAt(command, 1);
@@ -829,15 +835,15 @@ public class MyEventListener extends ListenerAdapter {
 					} catch (Exception ignored) {}
 
 					if(tag.isEmpty()) {
-						channel.sendMessage("what tag do I set for " + mentionsList.get(0).getAsMention() + "?"
+						channel.sendMessage("what tag do I set for " + mentionsList.getFirst().getAsMention() + "?"
 								+ "\nplease provide a tag (phrase used in the s!get command)").queue();
 						return;
 					}
 
-					if(thisServerSettings.CreateRolepair(mentionsList.get(0).getIdLong(), tag))
-						channel.sendMessage(mentionsList.get(0).getAsMention() + " self-assignment tag is already set to " + tag).queue();
+					if(thisServerSettings.CreateRolepair(mentionsList.getFirst().getIdLong(), tag))
+						channel.sendMessage(mentionsList.getFirst().getAsMention() + " self-assignment tag is already set to " + tag).queue();
 					else
-						channel.sendMessage(mentionsList.get(0).getAsMention() + " self-assignment tag has been set to " + tag).queue();
+						channel.sendMessage(mentionsList.getFirst().getAsMention() + " self-assignment tag has been set to " + tag).queue();
 				}
 				if(command.startsWith("delrole") || command.startsWith("deleterole")) {
 					List<Role> mentionsList = inputMessage.getMentions().getRoles();
@@ -850,7 +856,7 @@ public class MyEventListener extends ListenerAdapter {
 						return;
 					}
 
-					if(thisServerSettings.DeleteRolepairs(mentionsList.get(0).getIdLong()))
+					if(thisServerSettings.DeleteRolepairs(mentionsList.getFirst().getIdLong()))
 						channel.sendMessage("All tags for the role have been deleted").queue();
 					else
 						channel.sendMessage("bruh (none left)").queue();
@@ -950,19 +956,21 @@ public class MyEventListener extends ListenerAdapter {
 
 					//GIB ALL DAT FFUUNN INFO
 					if(command.startsWith(pre + "help"))
-						channel.sendMessage("FUNBUCK:tm: UTILITY (c) 2021 \n"
-					+ "**type \"fun\" at the beginning of evey command** or use f! prefix \n"
-					+ "help - displays this fun message\n"
-					+ "pay (mention) (amount) - Pays (mention) funbucks in (amount) from _your fun bank_\n"
-					+ "pr{ofile} [mention] - Displays Funny:tm: Profile\n"
-					+ "notif{ications} - Turns on/off ping notifications\n"
-					+ "> MAX ADMIN STUFFS:\n"
-					+ "fine (mention) (amount) - sucks (amount) funbucks from (mention) into the back void \n"
-					+ "grant (mention) (amount) - grants (amount) funbucks to (mention) from the eternal stash \n"
-					+ "ban (mention) - prevents (mention) from using any fun:tm: commands \n"
-					+ "pardon (mention) - un-bans (mention)\n"
-					+ "tax (amount) - deflates the entire economy over the starting funbucks\n"
-					+ "salary (amount) - inflates the entire economy\n").queue();
+						channel.sendMessage("""
+                                FUNBUCK:tm: UTILITY (c) 2021\s
+                                **type "fun" at the beginning of evey command** or use f! prefix\s
+                                help - displays this fun message
+                                pay (mention) (amount) - Pays (mention) funbucks in (amount) from _your fun bank_
+                                pr{ofile} [mention] - Displays Funny:tm: Profile
+                                notif{ications} - Turns on/off ping notifications
+                                > MAX ADMIN STUFFS:
+                                fine (mention) (amount) - sucks (amount) funbucks from (mention) into the back void\s
+                                grant (mention) (amount) - grants (amount) funbucks to (mention) from the eternal stash\s
+                                ban (mention) - prevents (mention) from using any fun:tm: commands\s
+                                pardon (mention) - un-bans (mention)
+                                tax (amount) - deflates the entire economy over the starting funbucks
+                                salary (amount) - inflates the entire economy
+                                """).queue();
 
 					//pAY THE MANS THE MONEYZ (c) (R) (k)
 					if(command.startsWith(pre + "pay"))
@@ -971,7 +979,7 @@ public class MyEventListener extends ListenerAdapter {
 						FunProfile funto;
 
 						try {
-							funto = GetProfile(mentionsList.get(0).getUser(), channel);
+							funto = GetProfile(mentionsList.getFirst().getUser(), channel);
 						} catch (Exception e) {
 							channel.sendMessage("Yo, who am I payin' here?").queue();
 							return;
@@ -1019,7 +1027,7 @@ public class MyEventListener extends ListenerAdapter {
 
 						FunProfile funguy;
 						try {
-							funguy = GetProfile(mentionsList.get(0).getUser(), channel);
+							funguy = GetProfile(mentionsList.getFirst().getUser(), channel);
 						} catch (Exception e) {
 							funguy = GetProfile(event.getAuthor(), channel);
 						}
@@ -1064,7 +1072,7 @@ public class MyEventListener extends ListenerAdapter {
 
 							FunProfile funto;
 							try {
-								funto = GetProfile(mentionsList.get(0).getUser(), channel);
+								funto = GetProfile(mentionsList.getFirst().getUser(), channel);
 							} catch (Exception e) {
 								channel.sendMessage("USER NOT SPECIFIED").queue();
 								return;
@@ -1105,7 +1113,7 @@ public class MyEventListener extends ListenerAdapter {
 
 							FunProfile funto;
 							try {
-								funto = GetProfile(mentionsList.get(0).getUser(), channel);
+								funto = GetProfile(mentionsList.getFirst().getUser(), channel);
 							} catch (Exception e) {
 								channel.sendMessage("USER NOT SPECIFIED").queue();
 								return;
@@ -1143,7 +1151,7 @@ public class MyEventListener extends ListenerAdapter {
 
 							FunProfile funto;
 							try {
-								funto = GetProfile(mentionsList.get(0).getUser(), channel);
+								funto = GetProfile(mentionsList.getFirst().getUser(), channel);
 							} catch (Exception e) {
 								channel.sendMessage("USER NOT SPECIFIED").queue();
 								return;
@@ -1163,7 +1171,7 @@ public class MyEventListener extends ListenerAdapter {
 
 							FunProfile funto;
 							try {
-								funto = GetProfile(mentionsList.get(0).getUser(), channel);
+								funto = GetProfile(mentionsList.getFirst().getUser(), channel);
 							} catch (Exception e) {
 								channel.sendMessage("USER NOT SPECIFIED").queue();
 								return;
@@ -1263,10 +1271,11 @@ public class MyEventListener extends ListenerAdapter {
 				}
 				else {
 					if(command.startsWith(pre + "help"))
-						channel.sendMessage("FUNBUCK:tm: UTILITY (c) 2021 \n"
-					+ "**type \"fun\" at the beginning of evey command** or use f! prefix \n"
-					+ "__You need to be in a Fun:tm: chanel to use Funbucks:tm:__ \n"
-					+ "Make sure \"funbucks\" is in the name").queue();
+						channel.sendMessage("""
+                                FUNBUCK:tm: UTILITY (c) 2021\s
+                                **type "fun" at the beginning of evey command** or use f! prefix\s
+                                __You need to be in a Fun:tm: chanel to use Funbucks:tm:__\s
+                                Make sure "funbucks" is in the name""").queue();
 				}
 			}
 
@@ -1357,7 +1366,7 @@ public class MyEventListener extends ListenerAdapter {
 			if(inputMessage.getAuthor().getIdLong() != 341393480469184513L) { //exclude @nova from this
 				Attachment attachment = null;
 				try {
-					attachment = inputMessage.getAttachments().get(0);
+					attachment = inputMessage.getAttachments().getFirst();
 				} catch (Exception ignored) {
 				} //no attachment
 				if (attachment != null && attachment.isVideo()) {
@@ -1413,7 +1422,7 @@ public class MyEventListener extends ListenerAdapter {
 					"I will run s!autocrop on  it, but if this is incorrect please report this to othello7. ";
 
 			try { //get attachments
-				Attachment attachment = inputMessage.getAttachments().get(0);
+				Attachment attachment = inputMessage.getAttachments().getFirst();
 				if(attachment.isVideo()) {
 					filename = (DownloadFile(attachment, "autocrop"));
 				} else {
@@ -1501,7 +1510,7 @@ public class MyEventListener extends ListenerAdapter {
 						}
 						else {
 							System.out.println("found message");
-							messages.get(0).editMessage(board).queue();
+							messages.getFirst().editMessage(board).queue();
 						}
 					});
 				}

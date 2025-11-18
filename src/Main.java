@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 public class Main {
 	public static JDA boby;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		try {//import bot token
 			String file = "token.txt";
 			File textFile = new File(System.getProperty("user.dir") + "/bot/" + file);
@@ -19,7 +19,7 @@ public class Main {
 					.enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
 			abc.close();
 			//start command detection
-			MyEventListener ls = new MyEventListener(boby);
+			Boby ls = new Boby(boby);
 			boby.addEventListener(ls);
 			ls.thread.start();
 		}
