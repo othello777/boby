@@ -1,10 +1,6 @@
 import java.io.*;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,10 +12,6 @@ import java.util.concurrent.Executors;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.utils.FileUpload;
-/*
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;*/
 
 import net.dv8tion.jda.api.entities.channel.concrete.*;
 import net.dv8tion.jda.api.entities.channel.middleman.*;
@@ -30,10 +22,9 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Message.Attachment;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-//import uk.oczadly.karl.jnano.rpc.*;
-//import uk.oczadly.karl.jnano.rpc.util.RpcServiceProviders;
-//import uk.oczadly.karl.jnano.util.workgen.*;
 import net.objecthunter.exp4j.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 public class Boby extends ListenerAdapter {
 	public MessageChannel globalChannel;
@@ -43,13 +34,11 @@ public class Boby extends ListenerAdapter {
 	public final String prefixString4 = "n!";
 	public final String prefixString5 = "a!";
 	public List<FunProfile> lads = new ArrayList<>();
-	public List<FunProfile> nanolads = new ArrayList<>();
 	public List<ServerSettings> serverSettingss = new ArrayList<>();
 	Random random = new Random();
 	public JDA api;
 	public int lyricline = 0;
 	public final String funName = System.getProperty("user.dir") + "/bot/" + "fun.ser";
-	public final String nanoName = System.getProperty("user.dir") + "/bot/" + "nano.ser";
 	public final String ssettingsName = System.getProperty("user.dir") + "/bot/" + "ssettings.ser";
 	public boolean sing;
 	public GuildChannel lastDebugChannel;
@@ -74,17 +63,6 @@ public class Boby extends ListenerAdapter {
 	        fis.close();
 	        System.out.println("Fun Deserializationin Import Success");
 	        System.out.println(lads);
-
-	        FileInputStream fis2 = new FileInputStream(nanoName);
-			ObjectInputStream ois2 = new ObjectInputStream(fis2);
-	        nanolads = (List<FunProfile>)ois2.readObject();
-	        for (FunProfile funProfile : nanolads) {
-				funProfile.GetUser(api);
-			}
-	        ois2.close();
-	        fis2.close();
-	        System.out.println("Nano Deserializationin Import Success");
-	        System.out.println(nanolads);
 
 	        FileInputStream fis3 = new FileInputStream(ssettingsName);
 			ObjectInputStream ois3 = new ObjectInputStream(fis3);
@@ -742,7 +720,7 @@ public class Boby extends ListenerAdapter {
                     return;
 
             if(!(new File(System.getProperty("user.dir") + "/" + scriptname).exists()))
-                channel.sendMessage(":warning: Script missing\n" + System.getProperty("user.dir") + scriptname).queue();
+                channel.sendMessage(":warning: Script missing\n" + System.getProperty("user.dir") + "/" + scriptname).queue();
             else {
                 ProcessBuilder pb = new ProcessBuilder("sh", scriptname, l);
 
@@ -1410,44 +1388,62 @@ public class Boby extends ListenerAdapter {
 
 			//video autocroppper
 			if(inputMessage.getAuthor().getIdLong() != 341393480469184513L) { //exclude @nova from this
-				Attachment attachment = null;
-				try {
-					attachment = inputMessage.getAttachments().getFirst();
-				} catch (Exception ignored) {
-				} //no attachment
-				if (attachment != null && attachment.isVideo()) {
-					inputMessage.addReaction(Emoji.fromUnicode("U+2699")).queue();
+                String filename;
+                String link; //get link either from attachment or message
+                try { //get attachments
+                    Attachment attachment = inputMessage.getAttachments().getFirst();
+                    if(attachment.isVideo()) {
+                        link = attachment.getUrl();
+                    } else {
+                        //Attachment is not a video
+                        return;
+                    }
+                } catch (Exception e) { //get link
+                    link = extractURL(content);
+                }
+                if(link != null) {
+                    // Check if link leads to a video and download it
+                    filename = DownloadFile(link, "video", "autocrop");
+                    if (filename == null) {
+                        //Link doesn't lead to a video!
+                        return;
+                    }
+                }
+                else{
+                    //No attachment or link
+                    return;
+                }
 
-					String filename = (DownloadFile(attachment, "autocrop"));
+                //inputMessage.addReaction(Emoji.fromUnicode("U+2699")).queue(); //gear
 
-					ProcessBuilder pb = new ProcessBuilder("sh", "cropdetect.sh", "autocrop/" + filename);
-					pb.directory(new File(System.getProperty("user.dir") + "/bot/"));
-					Process p = pb.start();
+                ProcessBuilder pb = new ProcessBuilder("sh", "cropdetect.sh", "autocrop/" + filename);
+                pb.directory(new File(System.getProperty("user.dir") + "/bot/"));
+                Process p = pb.start();
 
-					// Read and print the standard output stream of the process
-					BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					String line;
-					StringBuilder sb = new StringBuilder();
-					p.waitFor();
-					while ((line = br.readLine()) != null) sb.append(line);
-					String crop = sb.toString();
-					System.out.println(crop);
+                // Read and print the standard output stream of the process
+                BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                StringBuilder sb = new StringBuilder();
+                p.waitFor();
+                while ((line = br.readLine()) != null) sb.append(line);
+                String crop = sb.toString();
+                System.out.println(crop);
 
-					int x = Integer.parseInt(crop.substring(0, crop.indexOf(':')));
-					int y = Integer.parseInt(crop.substring(crop.indexOf(':') + 1));
+                int x = Integer.parseInt(crop.substring(0, crop.indexOf(':')));
+                int y = Integer.parseInt(crop.substring(crop.indexOf(':') + 1));
 
-					inputMessage.removeReaction(Emoji.fromUnicode("U+2699")).queue();
-					if (x > 10 || y > 10) {
-						inputMessage.addReaction(Emoji.fromUnicode("U+26A0")).queue();
-						AutoCropVideo(channel, inputMessage, true);
-					} else {
-						inputMessage.addReaction(Emoji.fromUnicode("U+2705")).queue();
-						Thread.sleep(3 * 1000);
-						inputMessage.removeReaction(Emoji.fromUnicode("U+2705")).queue();
-						DeleteFiles("autocrop");
-					}
-
-				}
+                //inputMessage.removeReaction(Emoji.fromUnicode("U+2699")).queue(); //gear
+                if (x > 10 || y > 10) {
+                    inputMessage.addReaction(Emoji.fromUnicode("U+26A0")).queue(); //warn
+                    AutoCropVideo(channel, inputMessage, true);
+                } else {
+                    /*
+                    inputMessage.addReaction(Emoji.fromUnicode("U+2705")).queue();
+                    Thread.sleep(3 * 1000);
+                    inputMessage.removeReaction(Emoji.fromUnicode("U+2705")).queue();
+                     */
+                    DeleteFiles("autocrop");
+                }
 			}
 		super.onMessageReceived(event);
 		}catch (Exception e) {
@@ -1467,36 +1463,31 @@ public class Boby extends ListenerAdapter {
 				autocropmessage = "Your video has large black bars in it that can be autocropped out. " +
 					"I will run s!autocrop on  it, but if this is incorrect please report this to othello7. ";
 
-			try { //get attachments
+            String link; //get link either from attachment or message
+            String content = inputMessage.getContentRaw();
+            try { //get attachments
 				Attachment attachment = inputMessage.getAttachments().getFirst();
 				if(attachment.isVideo()) {
-					filename = (DownloadFile(attachment, "autocrop"));
+					link = attachment.getUrl();
 				} else {
 					channel.sendMessage("Attachment is not a video").queue();
 					return;
 				}
 			} catch (Exception e) { //get link
-				String content = inputMessage.getContentRaw();
-				if (content.contains("http")) {
-					// Extract link from message
-					String link = content.substring(content.indexOf("http"));
-
-					// Check if link leads to a video
-					//Connection.Response response = Jsoup.connect(link).execute();
-					//String contentType = "video";//response.contentType();
-
-					//if (contentType.startsWith("video")) {
-						filename = DownloadFile(link, "autocrop");
-					/*} else {
-						channel.sendMessage("Link doesn't lead to a video!").queue();
-						return;
-					}*/
-				}
-				else{
-					channel.sendMessage("No attachment or link").queue();
-					return;
-				}
+                link = extractURL(content);
 			}
+            if(link != null) {
+                // Check if link leads to a video and download it
+                filename = DownloadFile(link, "video", "autocrop");
+                if (filename == null) {
+                    channel.sendMessage("Link doesn't lead to a video!").queue();
+                    return;
+                }
+            }
+            else{
+                channel.sendMessage("No attachment or link").queue();
+                return;
+            }
 
 			try {
 				//convert
@@ -1508,10 +1499,9 @@ public class Boby extends ListenerAdapter {
 				channel.sendMessage("Error processing your video :(").queue();
 			}
 
-
 			//upload
 			inputMessage.addReaction(uploading).queue();
-			assert filename != null;
+			//assert filename != null;
 			int dotindex = filename.lastIndexOf('.');
 			String newfilename = filename.substring(0, dotindex) + "_autocrop" + filename.substring(dotindex);
 			File cropDir = new File(System.getProperty("user.dir") + "/bot/autocrop/");
@@ -1593,6 +1583,7 @@ public class Boby extends ListenerAdapter {
 				.replace("?", "").replace(",", "").replace("\"", "");
 	}
 
+    //Only used for the image downloading stuff now. should probably be merged in with the URL downloader for robustness.
 	private String DownloadFile(Attachment attachment, String dir) {
 		String dirString = (System.getProperty("user.dir") + "/bot/" + dir + "/");
 		File toDownload = new File(dirString + attachment.getFileName());
@@ -1607,23 +1598,42 @@ public class Boby extends ListenerAdapter {
 		return toDownload.getName();
 	}
 
-	@SuppressWarnings("SameParameterValue")
-	private String DownloadFile(String link, String dir) {
+    //awesome ass code I just wrote
+	@SuppressWarnings({"SameParameterValue", "deprecation"})
+	private String DownloadFile(String link, String mimetype, String dir) {
 		String dirString = (System.getProperty("user.dir") + "/bot/" + dir + "/");
-		HttpClient httpClient = HttpClient.newHttpClient();
-		HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(link)).build();
-		try {
-			HttpResponse<InputStream> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
-			InputStream inputStream = httpResponse.body();
-			String filename = link.substring(link.lastIndexOf('/') + 1);
-			Files.copy(inputStream, Paths.get(dirString + filename));
-			return filename;
-		} catch (Exception e) {
-			System.out.println("AAAAAAAAAAAA");
-			e.printStackTrace();
-		}
+        try {
+            URL url = new URL(link);
+			String filename = FilenameUtils.getName(url.getPath());
+            URLConnection connection = url.openConnection();
+            String contentType = connection.getContentType();
+            System.out.println(contentType + ":" + filename);
+            if (!contentType.contains(mimetype))
+                return  null;
+            FileUtils.copyURLToFile(url, new File(dirString + filename));
+            return filename;
+        } catch (IOException e) {
+            System.out.println("AAAAAAAAAAAA");
+            e.printStackTrace();
+        }
 		return null;
 	}
+
+    private String extractURL(String text){
+        if (text.contains("http")) {
+            // Extract link from message
+            String linkbegin = text.substring(text.indexOf("http"));
+            String link;
+            if (linkbegin.contains(" "))
+                link = linkbegin.substring(0, linkbegin.indexOf(" "));
+            else
+                link = linkbegin;
+
+            return link;
+        }
+        else
+            return null;
+    }
 
 	private List<String> ReadTextFile(String file) {
 		File textFile = new File(System.getProperty("user.dir") + "/bot/" + file);
