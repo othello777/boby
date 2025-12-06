@@ -729,15 +729,61 @@ public class Boby extends ListenerAdapter {
 			channel.sendMessage(mentionsList.getFirst().getAsMention() + " has been ratio’d!").queue();
 		}
 		if(command.startsWith("restart")) {
-			String l = command.substring(7);
-			if(!(new File(System.getProperty("user.dir") + "/bot/restart" + l + ".sh").exists()))
-				channel.sendMessage("There is no server restart script for \"" + l + "\" which likely means it's not implemented.").queue();
-			ProcessBuilder pb = new ProcessBuilder("sh", "restart" + l + ".sh");
-			pb.directory(new File(System.getProperty("user.dir") + "/bot/"));
-			channel.sendMessage("violently killing (if exists) and restarting: " + l).queue();
-			pb.start().waitFor();
-			channel.sendMessage("Restarted " + l).queue();
+            final String scriptname = "restart.sh";
+            String l;
+            try{
+                l = GetNextArg(command); //command.substring(7);
+            }
+            catch (java.lang.IndexOutOfBoundsException e){
+                channel.sendMessage(":warning: Server codename missing").queue();
+                return;
+            }
+            if (l.length() > 4)
+                    return;
+
+            if(!(new File(System.getProperty("user.dir") + "/" + scriptname).exists()))
+                channel.sendMessage(":warning: Script missing\n" + System.getProperty("user.dir") + scriptname).queue();
+            else {
+                ProcessBuilder pb = new ProcessBuilder("sh", scriptname, l);
+
+                pb.directory(new File(System.getProperty("user.dir")));
+
+
+                channel.sendMessage("violently killing (if exists) and restarting: " + l).queue();
+                Process process = pb.start();
+                String result = new String(process.getInputStream().readAllBytes());
+                process.waitFor();
+                channel.sendMessage("Output from server:\n```\n" + result + "\n```").queue();
+            }
 		}
+        if(command.startsWith("status")) {
+            final String scriptname = "status.sh";
+            String l;
+            try{
+                l = GetNextArg(command); //command.substring(6);
+            }
+            catch (java.lang.IndexOutOfBoundsException e){
+                channel.sendMessage(":warning: Server codename missing").queue();
+                return;
+            }
+            if (l.length() > 4)
+                return;
+
+            if(!(new File(System.getProperty("user.dir") + "/" + scriptname).exists()))
+                channel.sendMessage(":warning: Script missing\n" + System.getProperty("user.dir") + "/" + scriptname).queue();
+            else {
+                ProcessBuilder pb = new ProcessBuilder("sh", scriptname, l);
+
+                pb.directory(new File(System.getProperty("user.dir")));
+
+
+                channel.sendMessage("Getting status of " + l).queue();
+                Process process = pb.start();
+                String result = new String(process.getInputStream().readAllBytes());
+                process.waitFor();
+                channel.sendMessage("Output from server:\n```\n" + result + "\n```").queue();
+            }
+        }
 		if(command.startsWith("you're not real") || command.startsWith("youre not real") ||
 				command.startsWith("your not real") || command.startsWith("isnt real") || command.startsWith("isn't real") ) {
 			channel.sendMessage("https://cdn.discordapp.com/emojis/836400200024195103.gif").queue();
