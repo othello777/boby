@@ -28,7 +28,7 @@ import org.apache.commons.io.FilenameUtils;
 
 public class Boby extends ListenerAdapter {
 	public MessageChannel globalChannel;
-	public final String prefixString  = "s!";
+	public final String prefixString = "s!";
 	public final String prefixString2 = "boby ";
 	public final String prefixString3 = "f!";
 	public final String prefixString4 = "n!";
@@ -46,7 +46,7 @@ public class Boby extends ListenerAdapter {
 	//RpcQueryNode rpc = RpcServiceProviders.nanex();
 
 	@SuppressWarnings("unchecked")
-    Boby(JDA jda){
+	Boby(JDA jda) {
 		api = jda;
 		/*System.out.println("List of attached Servers:");
         for (Guild guild : api.getGuilds()) {
@@ -55,46 +55,45 @@ public class Boby extends ListenerAdapter {
 		try {
 			FileInputStream fis = new FileInputStream(funName);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-	        lads = (List<FunProfile>)ois.readObject();
-	        for (FunProfile funProfile : lads) {
+			lads = (List<FunProfile>) ois.readObject();
+			for (FunProfile funProfile : lads) {
 				funProfile.GetUser(api);
 			}
-	        ois.close();
-	        fis.close();
-	        System.out.println("Fun Deserializationin Import Success");
-	        System.out.println(lads);
+			ois.close();
+			fis.close();
+			System.out.println("Fun Deserializationin Import Success");
+			System.out.println(lads);
 
-	        FileInputStream fis3 = new FileInputStream(ssettingsName);
+			FileInputStream fis3 = new FileInputStream(ssettingsName);
 			ObjectInputStream ois3 = new ObjectInputStream(fis3);
-			serverSettingss = (List<ServerSettings>)ois3.readObject();
-	        ois3.close();
-	        fis3.close();
-	        System.out.println("Server Settings Deserializationin Import Success");
-	        System.out.println(serverSettingss);
-		}
-		catch (Exception e) {
+			serverSettingss = (List<ServerSettings>) ois3.readObject();
+			ois3.close();
+			fis3.close();
+			System.out.println("Server Settings Deserializationin Import Success");
+			System.out.println(serverSettingss);
+		} catch (Exception e) {
 			System.out.println("Error in Deserializationin");
 		}
 	}
 
-	  Thread thread = new Thread(){
-		    public void run(){
-		    	Scanner scanner = new Scanner(System.in);
-		    	boolean contin = true;
-		    	while(contin) {
-		    		String text = scanner.nextLine();
-		    		if(text != null && !text.isEmpty()) {
-						globalChannel.sendMessage(text).queue();
-		    			System.out.println();
-		    			if(text.equals("s!quit")) {
-			    			contin = false;
-			    			System.out.println("Input Canceled");
-			    		}
-		    		}
-		    	}
-		    	scanner.close();
-		    }
-		  };
+	Thread thread = new Thread() {
+		public void run() {
+			Scanner scanner = new Scanner(System.in);
+			boolean contin = true;
+			while (contin) {
+				String text = scanner.nextLine();
+				if (text != null && !text.isEmpty()) {
+					globalChannel.sendMessage(text).queue();
+					System.out.println();
+					if (text.equals("s!quit")) {
+						contin = false;
+						System.out.println("Input Canceled");
+					}
+				}
+			}
+			scanner.close();
+		}
+	};
 
 	//@SuppressWarnings("deprecation")
 	@Override
@@ -103,11 +102,11 @@ public class Boby extends ListenerAdapter {
 		Message inputMessage = event.getMessage(); //save input message
 
 		//Carl's Cart Forwarder
-		if(event.getGuild().getIdLong() == 410530160102866944L //TDK
+		if (event.getGuild().getIdLong() == 410530160102866944L //TDK
 				&& event.getGuildChannel().getIdLong() == 622927404540887050L) //#sar-surviv
 		{
 			//System.out.println("channel detected! num attachments: " + inputMessage.getAttachments().size());
-			if(inputMessage.getAttachments().size() == 2) {
+			if (inputMessage.getAttachments().size() == 2) {
 				System.out.println("sender or something: " + inputMessage.getAuthor());
 				((MessageChannel) (api.getGuildById(1266807463525486594L) //othello7 house
 						.getGuildChannelById(1338601206913962027L))) //#sar
@@ -116,16 +115,15 @@ public class Boby extends ListenerAdapter {
 			}
 		}
 
-		if(event.getAuthor().isBot() && !(event.getMessage().getContentRaw().toLowerCase().contains(prefixString) ||
-		   event.getMessage().getContentRaw().toLowerCase().contains(prefixString2))) return;
+		if (event.getAuthor().isBot() && !(event.getMessage().getContentRaw().toLowerCase().contains(prefixString) ||
+				event.getMessage().getContentRaw().toLowerCase().contains(prefixString2))) return;
 
 
 		channel = event.getChannel(); //respond in same channel
 		globalChannel = event.getChannel(); //global should only be used where you know threading isnt a skissue
 		String content = inputMessage.getContentRaw(); //get the raw content of the message
 		//this is a DEBUG LOG. and for some reason gets often used as an ADMIN LOG. make a real ADMIN LOG for ADMINS *LATER* please.
-		if(lastDebugChannel == null || lastDebugChannel != event.getGuildChannel())
-		{
+		if (lastDebugChannel == null || lastDebugChannel != event.getGuildChannel()) {
 			lastDebugChannel = event.getGuildChannel();
 			System.out.println("[" + event.getGuild().getName() + " | #" + event.getGuildChannel().getName() + "]: ");
 		}
@@ -1312,7 +1310,7 @@ public class Boby extends ListenerAdapter {
 						}
 					}
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			channel.sendMessage("Sorry, my brain is spaghetti code :( \nError in command: " + e.toString()).queue();
 			e.printStackTrace();
 		}
@@ -1416,9 +1414,9 @@ public class Boby extends ListenerAdapter {
 				}
 			}
 			super.onMessageReceived(event);
-		}catch (Exception e) {
-		System.out.println("Sorry, my brain is spaghetti code :( \nError in command: " + e.toString());
-		e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Sorry, my brain is spaghetti code :( \nError in command: " + e.toString());
+			e.printStackTrace();
 		}
 	}
 
@@ -1429,35 +1427,34 @@ public class Boby extends ListenerAdapter {
 			final Emoji converting = Emoji.fromUnicode("U+1F504");
 			final Emoji uploading = Emoji.fromUnicode("U+1F4E4");
 			String autocropmessage = "";
-			if(autoautocrop)
+			if (autoautocrop)
 				autocropmessage = "Your video has large black bars in it that can be autocropped out. " +
-					"I will run s!autocrop on  it, but if this is incorrect please report this to othello7. ";
+						"I will run s!autocrop on  it, but if this is incorrect please report this to othello7. ";
 
-            String link; //get link either from attachment or message
-            String content = inputMessage.getContentRaw();
-            try { //get attachments
+			String link; //get link either from attachment or message
+			String content = inputMessage.getContentRaw();
+			try { //get attachments
 				Attachment attachment = inputMessage.getAttachments().getFirst();
-				if(attachment.isVideo()) {
+				if (attachment.isVideo()) {
 					link = attachment.getUrl();
 				} else {
 					channel.sendMessage("Attachment is not a video").queue();
 					return;
 				}
 			} catch (Exception e) { //get link
-                link = extractURL(content);
+				link = extractURL(content);
 			}
-            if(link != null) {
-                // Check if link leads to a video and download it
-                filename = DownloadFile(link, "video", "autocrop");
-                if (filename == null) {
-                    channel.sendMessage("Link doesn't lead to a video!").queue();
-                    return;
-                }
-            }
-            else{
-                channel.sendMessage("No attachment or link").queue();
-                return;
-            }
+			if (link != null) {
+				// Check if link leads to a video and download it
+				filename = DownloadFile(link, "video", "autocrop");
+				if (filename == null) {
+					channel.sendMessage("Link doesn't lead to a video!").queue();
+					return;
+				}
+			} else {
+				channel.sendMessage("No attachment or link").queue();
+				return;
+			}
 
 			try {
 				//convert
@@ -1484,37 +1481,32 @@ public class Boby extends ListenerAdapter {
 		for (Guild guild : api.getGuilds()) {
 			//System.out.println("Getting Guilds");
 			for (TextChannel channel : guild.getTextChannels()) {
-				if(channel.getName().contains("fun-economy")) {
+				if (channel.getName().contains("fun-economy")) {
 					System.out.println("Found #fun-economy in " + guild.getName());
 
 					channel.getHistory().retrievePast(1).queue(messages -> {
 						String board = "Current registered members of the Fun:tm: economy:\n";
 						Collections.sort(lads);
 						for (FunProfile funProfile : lads) {
-							if(funProfile.owner.getIdLong() == 410529944624693279L)
-							{
+							if (funProfile.owner.getIdLong() == 410529944624693279L) {
 								board += "$" + "∞" + " <:funbuckplus:886723353199656960> "
 										+ funProfile.owner.getAsMention() + " \"I own the economy\" \n";
-							}
-							else if(funProfile.banned)
-							{
+							} else if (funProfile.banned) {
 								board += "$" + funProfile.funbucks + " <:funbuckplus:886723353199656960> "
 										+ funProfile.owner.getAsMention() + " (banned) \n";
-							}
-							else
+							} else
 								board += "$" + funProfile.funbucks + " <:funbuckplus:886723353199656960> "
 										+ funProfile.owner.getAsMention() + "\n";
 						}
 
-					    // messages (list) contains all received messages
-					    // Access them in here
-					    // Use for example messages.get(0) to get the received message
-					    // (messages is of type List)
-						if(messages.isEmpty()) {
+						// messages (list) contains all received messages
+						// Access them in here
+						// Use for example messages.get(0) to get the received message
+						// (messages is of type List)
+						if (messages.isEmpty()) {
 							System.out.println("not found message");
 							channel.sendMessage(board).queue();
-						}
-						else {
+						} else {
 							System.out.println("found message");
 							messages.getFirst().editMessage(board).queue();
 						}
@@ -1526,7 +1518,7 @@ public class Boby extends ListenerAdapter {
 
 	private FunProfile GetProfile(User user, MessageChannel channel) {
 		for (FunProfile funProfile : lads) {
-			if(funProfile.owner.getIdLong() == user.getIdLong())
+			if (funProfile.owner.getIdLong() == user.getIdLong())
 				return funProfile;
 		}
 		channel.sendMessage("Adding new user " + user.getAsMention()).queue();
@@ -1539,7 +1531,7 @@ public class Boby extends ListenerAdapter {
 
 	private ServerSettings GetServerProfile(int GuildID, MessageChannel channel) {
 		for (ServerSettings serverSettings : serverSettingss) {
-			if(serverSettings.ID == GuildID)
+			if (serverSettings.ID == GuildID)
 				return serverSettings;
 		}
 		channel.sendMessage("Creating new settings profile for guild " + GuildID).queue();
@@ -1553,7 +1545,7 @@ public class Boby extends ListenerAdapter {
 				.replace("?", "").replace(",", "").replace("\"", "");
 	}
 
-    //Only used for the image downloading stuff now. should probably be merged in with the URL downloader for robustness.
+	//Only used for the image downloading stuff now. should probably be merged in with the URL downloader for robustness.
 	private String DownloadFile(Attachment attachment, String dir) {
 		String dirString = (System.getProperty("user.dir") + "/bot/" + dir + "/");
 		File toDownload = new File(dirString + attachment.getFileName());
@@ -1561,49 +1553,48 @@ public class Boby extends ListenerAdapter {
 			//toDownload.getName().lastIndexOf('.');
 			toDownload = new File(dirString
 					+ toDownload.getName().substring(0, toDownload.getName().lastIndexOf('.'))
-							+ "0." + attachment.getFileExtension());
+					+ "0." + attachment.getFileExtension());
 		}
 		System.out.println(dirString + toDownload.getName());
 		attachment.getProxy().downloadToFile(toDownload).join();
 		return toDownload.getName();
 	}
 
-    //awesome ass code I just wrote
+	//awesome ass code I just wrote
 	@SuppressWarnings({"SameParameterValue", "deprecation"})
 	private String DownloadFile(String link, String mimetype, String dir) {
 		String dirString = (System.getProperty("user.dir") + "/bot/" + dir + "/");
-        try {
-            URL url = new URL(link);
+		try {
+			URL url = new URL(link);
 			String filename = FilenameUtils.getName(url.getPath());
-            URLConnection connection = url.openConnection();
-            String contentType = connection.getContentType();
-            System.out.println(contentType + ":" + filename);
-            if (!contentType.contains(mimetype))
-                return  null;
-            FileUtils.copyURLToFile(url, new File(dirString + filename));
-            return filename;
-        } catch (IOException e) {
-            System.out.println("AAAAAAAAAAAA");
-            e.printStackTrace();
-        }
+			URLConnection connection = url.openConnection();
+			String contentType = connection.getContentType();
+			System.out.println(contentType + ":" + filename);
+			if (!contentType.contains(mimetype))
+				return null;
+			FileUtils.copyURLToFile(url, new File(dirString + filename));
+			return filename;
+		} catch (IOException e) {
+			System.out.println("AAAAAAAAAAAA");
+			e.printStackTrace();
+		}
 		return null;
 	}
 
-    private String extractURL(String text){
-        if (text.contains("http")) {
-            // Extract link from message
-            String linkbegin = text.substring(text.indexOf("http"));
-            String link;
-            if (linkbegin.contains(" "))
-                link = linkbegin.substring(0, linkbegin.indexOf(" "));
-            else
-                link = linkbegin;
+	private String extractURL(String text) {
+		if (text.contains("http")) {
+			// Extract link from message
+			String linkbegin = text.substring(text.indexOf("http"));
+			String link;
+			if (linkbegin.contains(" "))
+				link = linkbegin.substring(0, linkbegin.indexOf(" "));
+			else
+				link = linkbegin;
 
-            return link;
-        }
-        else
-            return null;
-    }
+			return link;
+		} else
+			return null;
+	}
 
 	private List<String> ReadTextFile(String file) {
 		File textFile = new File(System.getProperty("user.dir") + "/bot/" + file);
@@ -1611,8 +1602,8 @@ public class Boby extends ListenerAdapter {
 		try {
 			BufferedReader abc = new BufferedReader(new FileReader(textFile));
 			String line;
-			while((line = abc.readLine()) != null) {
-			    lines.add(line);
+			while ((line = abc.readLine()) != null) {
+				lines.add(line);
 			}
 			abc.close();
 		} catch (Exception e) {
@@ -1628,13 +1619,12 @@ public class Boby extends ListenerAdapter {
 	}
 
 	@SuppressWarnings("all")
-	private void DeleteFiles(String dir)
-	{
+	private void DeleteFiles(String dir) {
 		File[] filesList = new File(System.getProperty("user.dir") + "/bot/" + dir).listFiles();
 		assert filesList != null;
-		for(File file : filesList) {
-			if(file.isFile()) {
-				if(!file.delete())
+		for (File file : filesList) {
+			if (file.isFile()) {
+				if (!file.delete())
 					System.out.println(file.getName() + ": File deletion failed!");
 			}
 		}
@@ -1647,19 +1637,19 @@ public class Boby extends ListenerAdapter {
 		assert contents != null;
 		int select = random.nextInt(contents.length);
 
-		if(command != null) {
+		if (command != null) {
 			try {
 				select = Integer.parseInt(GetNextArg(command)) - 1;
-			}catch (Exception e){
-				if(command.contains("list")) {
+			} catch (Exception e) {
+				if (command.contains("list")) {
 					String ls = "";
 					for (int i = 0; i < contents.length; i++) {
 						ls += "`[" + (i + 1) + "] " + contents[i] + "`\n";
 					}
-					if(ls.length() > 2000) {
+					if (ls.length() > 2000) {
 						channel.sendMessage(ls.substring(0, 2000)).queue();
 						ls = ls.substring(2000);
-						if(!ls.startsWith("`")) {
+						if (!ls.startsWith("`")) {
 							ls = "`" + ls;
 						}
 					}
@@ -1679,16 +1669,18 @@ public class Boby extends ListenerAdapter {
 	private String GetNextArg(String command) {
 		return GetArgAt(command, 1);
 	}
-	private String GetArgAt(String command ,int arglevel) {
+
+	private String GetArgAt(String command, int arglevel) {
 		return GetArgs(command).get(arglevel - 1);
 	}
+
 	private List<String> GetArgs(String command) {//othello7 frick(TM) arg parser
 		List<String> Args = new ArrayList<>();//Set up list for the args
 		//arglevel //the arg number
 		int index = 0; //how many loop points
 		int start = 0; //the location of the arg
 		String temp1 = "";//we will do a lot with this
-		while(command.chars().filter(ch -> ch == ' ').count() > index) {//lets go on a trip across the entire command!
+		while (command.chars().filter(ch -> ch == ' ').count() > index) {//lets go on a trip across the entire command!
 			start = command.indexOf(" ", start);//find the next " " based from the previous one
 			start++;//add 1 to remove the " " at the beginning
 			try {//try to get start and end of command
