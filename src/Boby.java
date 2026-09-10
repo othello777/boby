@@ -48,10 +48,10 @@ public class Boby extends ListenerAdapter {
 	@SuppressWarnings("unchecked")
 	Boby(JDA jda) {
 		api = jda;
-		/*System.out.println("List of attached Servers:");
-        for (Guild guild : api.getGuilds()) {
-        	System.out.println("   -" + guild.getName());
-		}*/
+		System.out.println("Number of attached servers: " + api.getGuildCache().size());
+		for (Guild guild : api.getGuilds()) {
+			System.out.println("   -" + guild.getName());
+		}
 		try {
 			FileInputStream fis = new FileInputStream(funName);
 			ObjectInputStream ois = new ObjectInputStream(fis);

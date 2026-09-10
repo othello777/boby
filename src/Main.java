@@ -18,6 +18,7 @@ public class Main {
 			boby = JDABuilder.createDefault(abc.readLine())
 					.enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
 			abc.close();
+			boby.awaitReady();
 			//start command detection
 			Boby ls = new Boby(boby);
 			boby.addEventListener(ls);
