@@ -58,6 +58,7 @@
                             <exclude>META-INF/*.RSA</exclude>
                             <exclude>META-INF/LICENSE.txt</exclude>
                             <exclude>META-INF/NOTICE</exclude>
+			    <exclude>META-INF/NOTICE.txt</exclude>
                             <exclude>META-INF/LICENSE</exclude>
                             <exclude>META-INF/versions/9/module-info.class</exclude>
                             <exclude>META-INF/okio.kotlin_module</exclude>
@@ -101,7 +102,7 @@
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
-      <version>4.29.3</version>
+      <version>4.36.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
     <dependency>

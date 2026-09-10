@@ -1437,7 +1437,7 @@ public class Boby extends ListenerAdapter {
                     inputMessage.addReaction(Emoji.fromUnicode("U+26A0")).queue(); //warn
                     AutoCropVideo(channel, inputMessage, true);
                 } else {
-                    /*
+                    /* //check mark
                     inputMessage.addReaction(Emoji.fromUnicode("U+2705")).queue();
                     Thread.sleep(3 * 1000);
                     inputMessage.removeReaction(Emoji.fromUnicode("U+2705")).queue();
